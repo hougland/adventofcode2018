@@ -10,6 +10,7 @@ import (
 func main() {
 	lines := readFileString()
 
+	// part 1
 	var twos []string
 	var threes []string
 
@@ -21,32 +22,50 @@ func main() {
 			counter[char]++
 		}
 
-		for key, value := range counter {
-			if value == 2 {
-				if !contains(twos, key) {
-					twos = append(twos, key)
-					fmt.Println("adding " + key + " to twos")
-				} else {
-					fmt.Println("NOT adding " + key + " to twos")
-				}
-			} else if value == 3 {
-				if !contains(threes, key) {
-					threes = append(threes, key)
-					fmt.Println("adding " + key + " to threes")
-				} else {
-					fmt.Println("NOT adding " + key + " to threes")
-				}
+		for _, value := range counter {
+			if value == 2 && !contains(twos, line) {
+				twos = append(twos, line)
+			} else if value == 3 && !contains(threes, line) {
+				threes = append(threes, line)
 			}
 		}
 	}
 
-	fmt.Println(twos)
-	fmt.Println(threes)
 	fmt.Print(len(twos))
 	fmt.Print("*")
 	fmt.Print(len(threes))
-	fmt.Print("=\n")
-	fmt.Print((len(twos)) * (len(threes)))
+	fmt.Print("=")
+	fmt.Println((len(twos)) * (len(threes)))
+
+	// part 2
+	mostSimilarChars := 0
+	var mostSimilarCharsStringLine1 string
+	var mostSimilarCharsStringLine2 string
+
+	for index1, line1 := range lines {
+		for index2, line2 := range lines {
+			if index2 <= index1 { // skip current and previous lines
+				continue
+			}
+
+			similarCharsInLine := 0
+			for charIndex, char := range strings.Split(line1, "") {
+				if char == string(line2[charIndex]) {
+					similarCharsInLine++
+				}
+			}
+
+			if similarCharsInLine > mostSimilarChars {
+				mostSimilarChars = similarCharsInLine
+				mostSimilarCharsStringLine1 = line1
+				mostSimilarCharsStringLine2 = line2
+			}
+		}
+	}
+
+	fmt.Println(mostSimilarCharsStringLine1)
+	fmt.Println(mostSimilarCharsStringLine2)
+	// manually grab the answer
 }
 
 func readFileString() []string {
@@ -67,7 +86,3 @@ func contains(chars []string, target string) bool {
 	}
 	return false
 }
-
-// wrong: 416
-// wrong: 459
-// wrong: 17631
