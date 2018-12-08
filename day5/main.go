@@ -17,13 +17,12 @@ func main() {
 	unitToCount := make(map[string]int) // letter -> resulting polymer length
 
 	for _, letter := range alphabet {
-		fmt.Print("current")
 		regex := regexp.MustCompile("(?i)" + letter)
 		strippedLine := regex.ReplaceAllString(input, "")
 		polymer := breakdownUnits(strings.Split(strippedLine, ""))
 		unitToCount[letter] = len(polymer)
 	}
-	
+
 	shortestLength := 100000
 	for _, value := range unitToCount {
 		if value < shortestLength {
